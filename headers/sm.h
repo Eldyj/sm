@@ -26,6 +26,10 @@ typedef enum {
 	op_swp,
 	op_shr,
 	op_shl,
+	op_and,
+	op_xor,
+	op_or,
+	op_not,
 } op_kind_t;
 
 typedef enum {
@@ -178,6 +182,26 @@ eval(ops, regs)
 				(*regs)[op.argv[0].value] >>= getval(op.argv[1], regs);
 				break;
 
+			case op_and:
+				if (op.argv[0].type != atom_register) break;
+				(*regs)[op.argv[0].value] &= getval(op.argv[1], regs);
+				break;
+
+			case op_xor:
+				if (op.argv[0].type != atom_register) break;
+				(*regs)[op.argv[0].value] ^= getval(op.argv[1], regs);
+				break;
+
+			case op_or:
+				if (op.argv[0].type != atom_register) break;
+				(*regs)[op.argv[0].value] |= getval(op.argv[1], regs);
+				break;
+				
+			case op_not:
+				if (op.argv[0].type != atom_register) break;
+				(*regs)[op.argv[0].value] = ~(*regs)[op.argv[0].value];
+				break;
+
 			case op_cmp: {
 				unsigned short val = 0;
 				unsigned long v1 = getval(op.argv[0], regs);
@@ -218,7 +242,7 @@ eval(ops, regs)
 				break;
 
 			case op_prn:
-				printf("%ld\n", getval(op.argv[0], regs));
+				printf("%lu\n", getval(op.argv[0], regs));
 				break;
 
 			default:
