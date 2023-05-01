@@ -201,8 +201,8 @@ void
 free_op_set(ops)
 	op_set_t ops;
 {
-	for (unsigned long i = 0; i < ops.length; ++i)
-		free_op(ops.operations[i]);
+	while (ops.length)
+		free_op(ops.operations[ops.length---1]);
 
 	free(ops.operations);
 }

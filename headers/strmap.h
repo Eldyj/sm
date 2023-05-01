@@ -66,7 +66,7 @@ strl_map_free(map)
 {
 	free(map.values);
 	
-	while(map.length)
+	while (map.length)
 		free(map.indexes[map.length---1]);
 		
 	free(map.indexes);

@@ -8,21 +8,21 @@ atom_kind_t
 get_atom_type(str)
 	char *str;
 {
-    if (str[1] != '\0')
-        return atom_number;
+	if (str[1] != '\0')
+		return atom_number;
 
-    switch (str[0]) {
-        case 'a':
-        case 'b':
-        case 'c':
-        case 'd':
-        case 'e':
-        case 'f':
-        case 'g':
-            return atom_register;
-        default:
-            return atom_number;
-    }
+	switch (str[0]) {
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+			return atom_register;
+		default:
+			return atom_number;
+	}
 }
 
 
@@ -52,7 +52,7 @@ get_atom(str)
 
 op_kind_t
 get_op_type(str)
-    char *str;
+	char *str;
 {
 	static const struct {
 		const char *name;
@@ -90,25 +90,25 @@ strl_map_t
 parse_labels(s)
 	char *s;
 {
-		strl_map_t labels = new_strl_map();
-		char *str = strdup(s);
-    char *str_p = str;
-    char *l;
-    char *line;
-    unsigned long current_line = 0;
+	strl_map_t labels = new_strl_map();
+	char *str = strdup(s);
+	char *str_p = str;
+	char *l;
+	char *line;
+	unsigned long current_line = 0;
 
-    while ((l = strtok_r(str, "\n", &str)) != NULL) {
-        line = strdup(l);
-        if (line[0] != '\0' && line[strlen(line)-1] == ':') {
-            line[strlen(line)-1] = '\0';
-            strl_map_append(&labels, line, current_line--);
-        }
-        free(line);
-        ++current_line;
-    }
+	while ((l = strtok_r(str, "\n", &str)) != NULL) {
+		line = strdup(l);
+		if (line[0] != '\0' && line[strlen(line)-1] == ':') {
+			line[strlen(line)-1] = '\0';
+			strl_map_append(&labels, line, current_line--);
+		}
+		free(line);
+		++current_line;
+	}
 
-    free(str_p);
-    return labels;
+	free(str_p);
+	return labels;
 }
 
 
@@ -139,7 +139,7 @@ from_asm(s)
 		line_p = line;
 
 		if (line[0] != '\0' && line[strlen(line)-1] == ':') {
-			// labels already parsed
+			// labels already parsed, ignoring
 		} else {
 			while ((token = strtok_r(line, " ", &line)) != NULL) {
 				if (line_start) {
