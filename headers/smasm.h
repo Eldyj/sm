@@ -123,6 +123,9 @@ from_asm(s)
 	};
 
 	strl_map_t labels = parse_labels(s);
+	
+	if (strl_map_index(labels, "_start"))
+		ops.index = strl_map_get(labels,"_start");
 
 	char *str = strdup(s);
 	char *str_p = str;

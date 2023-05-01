@@ -1,4 +1,3 @@
-ja start
 triangular:
 mv a 0
 cmp b 0
@@ -9,7 +8,7 @@ cmp b 1
 sub b 1
 jg loop
 ja end
-start:
+_start:
 mv b 10000000
 ja triangular
 end:

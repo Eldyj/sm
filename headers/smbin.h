@@ -10,7 +10,7 @@ to_bytes(fn, ops)
 {
 	op_t op;
 	unsigned short unit8;
-	unsigned long unit16;
+	unsigned long unit32;
 	atom_t atom;
 
 	FILE* fp = fopen(fn, "wb");
@@ -18,6 +18,9 @@ to_bytes(fn, ops)
 		perror("Error opening file");
 		exit(1);
 	}
+
+	unit32 = ops.index;
+	fwrite(&unit32, sizeof(unit32), 1, fp);
 
 	for (unsigned long i = 0; i < ops.length; ++i) {
 		op = ops.operations[i];
@@ -31,8 +34,8 @@ to_bytes(fn, ops)
 			unit8 = atom.type;
 			fwrite(&unit8, sizeof(unit8), 1, fp);
 
-			unit16 = atom.value;
-			fwrite(&unit16, sizeof(unit16), 1, fp);		  
+			unit32 = atom.value;
+			fwrite(&unit32, sizeof(unit32), 1, fp);		  
 		}
 	}
 
@@ -57,8 +60,11 @@ from_bytes(fn)
 
 	op_t op;
 	unsigned short unit8;
-	unsigned long unit16;
+	unsigned long unit32;
 	atom_t atom;
+
+	fread(&unit32, sizeof(unit32), 1, fp);
+	ops.index = unit32;
 
 	while (fread(&unit8, sizeof(unit8), 1, fp) == 1) {
 		op.type = unit8;
@@ -70,8 +76,8 @@ from_bytes(fn)
 		for (unsigned long j = 0; j < op.argc; ++j) {
 			fread(&unit8, sizeof(unit8), 1, fp);
 			atom.type = unit8;
-			fread(&unit16, sizeof(unit16), 1, fp);
-			atom.value = unit16;
+			fread(&unit32, sizeof(unit32), 1, fp);
+			atom.value = unit32;
 			op.argv[j] = atom;
 		}
 
