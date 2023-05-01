@@ -9,3 +9,4 @@ shr b 2
 jb swp_ab
 prn a
 prn b
+hlt 0

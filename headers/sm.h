@@ -30,6 +30,9 @@ typedef enum {
 	op_xor,
 	op_or,
 	op_not,
+	op_inc,
+	op_dec,
+	op_hlt,
 } op_kind_t;
 
 typedef enum {
@@ -202,6 +205,16 @@ eval(ops, regs)
 				(*regs)[op.argv[0].value] = ~(*regs)[op.argv[0].value];
 				break;
 
+			case op_inc:
+				if (op.argv[0].type != atom_register) break;
+				++(*regs)[op.argv[0].value];
+				break;
+
+			case op_dec:
+				if (op.argv[0].type != atom_register) break;
+				--(*regs)[op.argv[0].value];
+				break;
+
 			case op_cmp: {
 				unsigned short val = 0;
 				unsigned long v1 = getval(op.argv[0], regs);
@@ -243,6 +256,10 @@ eval(ops, regs)
 
 			case op_prn:
 				printf("%lu\n", getval(op.argv[0], regs));
+				break;
+
+			case op_hlt:
+				exit(getval(op.argv[0], regs));
 				break;
 
 			default:

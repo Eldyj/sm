@@ -82,6 +82,9 @@ get_op_type(str)
 		{"xor", op_xor},
 		{"or", op_or},
 		{"not", op_not},
+		{"inc", op_inc},
+		{"dec", op_dec},
+		{"hlt", op_hlt},
 	};
 	
 	static const size_t op_count = sizeof(op_table) / sizeof(op_table[0]);
