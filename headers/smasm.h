@@ -73,6 +73,8 @@ get_op_type(str)
 		{"jle", op_jle},
 		{"jge", op_jge},
 		{"prn", op_prn},
+		{"jb", op_jb},
+		{"gb", op_gb},
 	};
 	
 	static const size_t op_count = sizeof(op_table) / sizeof(op_table[0]);

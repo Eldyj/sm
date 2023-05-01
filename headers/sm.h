@@ -21,6 +21,8 @@ typedef enum {
 	op_jge,
 	op_jle,
 	op_prn,
+	op_jb,
+	op_gb,
 } op_kind_t;
 
 typedef enum {
@@ -116,6 +118,10 @@ eval(ops, regs)
 	op_set_t ops;
 	unsigned long (*regs)[reg_kinds];
 {
+	static unsigned long
+	jb_stack[256] = {0};
+	unsigned short jb_index = 0;
+	
 	while (ops.index < ops.length) {
 		op_t op = ops.operations[ops.index];
 		
@@ -176,6 +182,17 @@ eval(ops, regs)
 					ops.index = getval(op.argv[0], regs);
 					continue;
 				}
+				break;
+
+			case op_jb:
+				jb_stack[jb_index] = ops.index;
+				ops.index = getval(op.argv[0], regs) - 1;
+				++jb_index;
+				break;
+
+			case op_gb:
+				--jb_index;
+				ops.index = jb_stack[jb_index];
 				break;
 
 			case op_prn:
