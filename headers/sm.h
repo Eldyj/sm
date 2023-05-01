@@ -23,6 +23,9 @@ typedef enum {
 	op_prn,
 	op_jb,
 	op_gb,
+	op_swp,
+	op_shr,
+	op_shl,
 } op_kind_t;
 
 typedef enum {
@@ -131,6 +134,15 @@ eval(ops, regs)
 				(*regs)[op.argv[0].value] = getval(op.argv[1], regs);
 				break;
 
+			case op_swp:
+				if (op.argv[0].type != atom_register) break;
+				if (op.argv[1].type != atom_register) break;
+
+				unsigned long v = (*regs)[op.argv[0].value];
+				(*regs)[op.argv[0].value] = getval(op.argv[1], regs);
+				(*regs)[op.argv[1].value] = v;
+				break;
+
 			case op_add:
 				if (op.argv[0].type != atom_register) break;
 				(*regs)[op.argv[0].value] += getval(op.argv[1], regs);
@@ -154,6 +166,16 @@ eval(ops, regs)
 			case op_mod:
 				if (op.argv[0].type != atom_register) break;
 				(*regs)[op.argv[0].value] %= getval(op.argv[1], regs);
+				break;
+
+			case op_shl:
+				if (op.argv[0].type != atom_register) break;
+				(*regs)[op.argv[0].value] <<= getval(op.argv[1], regs);
+				break;
+
+			case op_shr:
+				if (op.argv[0].type != atom_register) break;
+				(*regs)[op.argv[0].value] >>= getval(op.argv[1], regs);
 				break;
 
 			case op_cmp: {

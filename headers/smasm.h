@@ -75,6 +75,9 @@ get_op_type(str)
 		{"prn", op_prn},
 		{"jb", op_jb},
 		{"gb", op_gb},
+		{"swp", op_swp},
+		{"shl", op_shl},
+		{"shr", op_shr},
 	};
 	
 	static const size_t op_count = sizeof(op_table) / sizeof(op_table[0]);
