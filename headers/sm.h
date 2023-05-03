@@ -86,37 +86,32 @@ getval(a, regs)
  */
 static unsigned short
 jmp_states[][3] = {
-	[op_ja - op_ja] = {
-		[0] = 1,
-		[1] = 1,
-		[2] = 1,
-	},
-	[op_jz - op_ja] = {
+	[op_jz - op_jz] = {
 		[0] = 1,
 		[1] = 0,
 		[2] = 0,
 	},
-	[op_jl - op_ja] = {
+	[op_jl - op_jz] = {
 		[0] = 0,
 		[1] = 1,
 		[2] = 0,
 	},
-	[op_jg - op_ja] = {
+	[op_jg - op_jz] = {
 		[0] = 0,
 		[1] = 0,
 		[2] = 1,
 	},
-	[op_jle - op_ja] = {
+	[op_jle - op_jz] = {
 		[0] = 1,
 		[1] = 1,
 		[2] = 0,
 	},
-	[op_jge - op_ja] = {
+	[op_jge - op_jz] = {
 		[0] = 1,
 		[1] = 0,
 		[2] = 1,
 	},
-	[op_jnz - op_ja] = {
+	[op_jnz - op_jz] = {
 		[0] = 0,
 		[1] = 1,
 		[2] = 1,
@@ -231,27 +226,31 @@ eval(ops, regs)
 			}
 
 			case op_ja:
+			jmp:
+			ops.index = getval(op.argv[0], regs);
+			continue;
+			break;
+			
 			case op_jz:
 			case op_jnz:
 			case op_jl:
 			case op_jg:
 			case op_jle:
 			case op_jge:
-				if (jmp_states[op.type - op_ja][(*regs)[reg_g]]) {
-					ops.index = getval(op.argv[0], regs);
-					continue;
-				}
+				if (jmp_states[op.type - op_jz][(*regs)[reg_g]])
+					goto jmp;
 				break;
 
 			case op_jb:
-				jb_stack[jb_index] = ops.index;
-				ops.index = getval(op.argv[0], regs) - 1;
+				jb_stack[jb_index] = ops.index+1;
 				++jb_index;
+				goto jmp;
 				break;
 
 			case op_gb:
 				--jb_index;
 				ops.index = jb_stack[jb_index];
+				continue;
 				break;
 
 			case op_prn:

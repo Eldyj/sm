@@ -7,7 +7,7 @@ dec b
 jg loop
 gb
 _start:
-mv b 1000000
+mv b 100
 jb triangular
 prn a
 hlt 0
