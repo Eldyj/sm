@@ -1,5 +1,8 @@
-#include "headers/smbin.h"
-#include "headers/smasm.h"
+#include <smbin.h>
+#include <smasm.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 char
 *read_file(fn)
@@ -36,7 +39,8 @@ main(argc, argv)
 	if (argc < 3)
 		return 1;
 	
-	static unsigned long regs = {0};
+	static
+	sm_unit_t regs[reg_kinds] = {0};
 	
 	if (!strcmp(argv[1], "run")) {
 		char *fc = read_file(argv[2]);
@@ -51,7 +55,6 @@ main(argc, argv)
 		char *fc = read_file(argv[2]);
 		op_set_t ops = from_asm(fc);
 		free(fc);
-		//print_op_set(ops);
 		to_bytes(argv[3], ops);
 		free_op_set(ops);
 	} else {

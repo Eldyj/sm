@@ -1,17 +1,12 @@
-#ifndef STRMAP_H_
-#	define STRMAP_H_
+#ifndef STRMAP_C_
+#	define STRMAP_C_
 
+#	include <strmap.h>
 #	include <stdlib.h>
 #	include <string.h>
 
-typedef struct {
-	char **indexes;
-	unsigned long *values;
-	unsigned long length;
-} strl_map_t;
-
 strl_map_t
-new_strl_map()
+new_strl_map(void)
 {
 	strl_map_t result = {
 		.indexes = malloc(sizeof(char *) * 0),
@@ -35,12 +30,12 @@ strl_map_append(map, i, v)
 	map->values[map->length-1] = v; 
 }
 
-unsigned long
+size_t
 strl_map_index(map, i)
 	strl_map_t map;
 	char *i;
 {
-	for (unsigned long j = 0; j < map.length; ++j)
+	for (size_t j = 0; j < map.length; ++j)
 		if (!strcmp(map.indexes[j], i))
 			return j+1;
 
@@ -72,4 +67,4 @@ strl_map_free(map)
 	free(map.indexes);
 }
 
-#endif /* !STRMAP_H_ */
+#endif /* !STRMAP_C_ */

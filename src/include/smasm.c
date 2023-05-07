@@ -1,8 +1,10 @@
-#ifndef SMASM_H
-#	define SMASM_H
+#ifndef SMASM_C
+#	define SMASM_C
 
-#	include "sm.h"
-#	include "strmap.h"
+# include <smasm.h>
+#	include <stdio.h>
+#	include <stdlib.h>
+#	include <string.h>
 
 atom_kind_t
 get_atom_type(str)
@@ -33,7 +35,7 @@ get_reg(str)
 	return *str - 'a';
 }
 
-unsigned long
+sm_unit_t
 get_num(str)
 	char *str;
 {
@@ -88,9 +90,8 @@ get_op_type(str)
 	};
 	
 	static const size_t op_count = sizeof(op_table) / sizeof(op_table[0]);
-	unsigned long i;
 
-	for (i = 0; i < op_count; ++i)
+	for (size_t i = 0; i < op_count; ++i)
 		if (!strcmp(str, op_table[i].name))
 			return op_table[i].kind;
 
@@ -107,7 +108,7 @@ parse_labels(s)
 	char *str_p = str;
 	char *l;
 	char *line;
-	unsigned long current_line = 0;
+	size_t current_line = 0;
 
 	while ((l = strtok_r(str, "\n", &str)) != NULL) {
 		line = strdup(l);
@@ -145,8 +146,7 @@ from_asm(s)
 	char *token;
 	char *line;
 	char *line_p;
-	unsigned short line_start;
-	unsigned long current_line = 0;
+	uint8_t line_start;
 
 	while ((l = strtok_r(str, "\n", &str)) != NULL) {
 		line_start = 1;
@@ -181,7 +181,6 @@ from_asm(s)
 		}
 
 		free(line_p);
-		++current_line;
 	}
 
 	free(str_p);
@@ -190,4 +189,4 @@ from_asm(s)
 	return ops;
 }
 
-#endif /* !SMASM_H */
+#endif /* !SMASM_C */
