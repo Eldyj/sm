@@ -3,7 +3,7 @@ SRC = src
 INCLUDE = $(SRC)/include
 
 CC=gcc
-FLAGS=-O2 -g3 -Wall -Wextra -pedantic -I$(INCLUDE)
+FLAGS=-O2 -g0 -Wall -Wextra -pedantic -I$(INCLUDE)
 CCF=$(CC) $(FLAGS)
 
 sm.o:
@@ -25,3 +25,7 @@ sma: smasm.o
 	$(CCF) -o$(BIN)/sma $(SRC)/sma.c $(BIN)/sm.o $(BIN)/smbin.o $(BIN)/smasm.o $(BIN)/strmap.o
 
 all: sma sme
+
+install: sma sme
+	cp $(BIN)/sma ~/.local/bin
+	cp $(BIN)/sme ~/.local/bin
