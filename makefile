@@ -26,6 +26,6 @@ sma: smasm.o
 
 all: sma sme
 
-install: sma sme
+install: all
 	cp $(BIN)/sma ~/.local/bin
 	cp $(BIN)/sme ~/.local/bin
