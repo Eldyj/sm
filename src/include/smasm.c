@@ -87,6 +87,8 @@ get_op_type(str)
 		{"inc", op_inc},
 		{"dec", op_dec},
 		{"hlt", op_hlt},
+		{"psh", op_psh},
+		{"pop", op_pop},
 	};
 	
 	static const size_t op_count = sizeof(op_table) / sizeof(op_table[0]);

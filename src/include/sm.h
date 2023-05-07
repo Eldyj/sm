@@ -39,6 +39,8 @@ typedef enum {
 	op_inc,
 	op_dec,
 	op_hlt,
+	op_psh,
+	op_pop,
 } op_kind_t;
 
 typedef enum {

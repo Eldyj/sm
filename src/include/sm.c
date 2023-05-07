@@ -65,10 +65,28 @@ eval(ops, regs)
 	size_t jb_stack[256] = {0};
 	uint8_t jb_index = 0;
 	
+	static
+	sm_unit_t sm_stack[8192] = {0};
+	size_t sm_sindex = 0;
+	
 	while (ops.index < ops.length) {
 		op_t op = ops.operations[ops.index];
 		
 		switch (op.type) {
+			case op_psh: {
+				sm_stack[sm_sindex++] = getval(op.argv[0], regs);
+				break;
+			}
+
+			case op_pop: {
+				if (op.argv[0].type != atom_register)
+					break;
+
+				--sm_sindex;
+				(*regs)[op.argv[0].value] = sm_stack[sm_sindex];
+				break;
+			}
+		
 			case op_mv: {
 				if (op.argv[0].type != atom_register)
 					break;
