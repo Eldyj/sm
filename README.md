@@ -3,7 +3,7 @@
 ## description
 
 Strange Machine. <br/>
-experiment with creating virtual machine based language in C with own bytecode and assembly
+experiment with creating virtual machine in C with own bytecode and assembly
 
 ## installation
 
