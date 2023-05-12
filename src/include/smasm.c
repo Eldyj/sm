@@ -153,6 +153,7 @@ from_asm(s)
 	char *line_p;
 	uint8_t line_start;
 	uint8_t j = 0;
+	op_kind_t ok = OP_NIL;
 
 	while ((l = strtok_r(str, "\n", &str)) != NULL) {
 		line_start = 1;
@@ -164,17 +165,18 @@ from_asm(s)
 		} else {
 			while ((token = strtok_r(line, " ", &line)) != NULL) {
 				if (line_start) {
+					if (j != op_argc[ok]) {
+						fprintf(stderr, "wrong arguments count, given: %d, expected %d\n", j, op_argc[ok]);
+						exit(1);				
+					}
+					
 					++ops.length;
 					ops.operations = realloc(ops.operations, sizeof(op_t) * ops.length);
-					ops.operations[ops.length - 1].type = get_op_type(token);
-					ops.operations[ops.length - 1].argv = malloc(sizeof(atom_t) * op_argc[ops.operations[ops.length-1].type]);
+					ops.operations[ops.length - 1].type = ok = get_op_type(token);
+					ops.operations[ops.length - 1].argv = malloc(sizeof(atom_t) * op_argc[ok]);
 					line_start = 0;
 					j = 0;
 				} else {
-					if (j == op_argc[ops.operations[ops.length-1].type]) {
-						fprintf(stderr, "wrong arguments count, given: %d, expected %d\n", j, op_argc[ops.operations[ops.length-1].type]);
-						exit(1);
-					}
 					char *arg = strdup(token);
 
 					if (strl_map_index(labels, arg) > 0) {
@@ -187,6 +189,11 @@ from_asm(s)
 					free(arg);
 				}
 			}
+		}
+		
+		if (j != op_argc[ok]) {
+			fprintf(stderr, "wrong arguments count, given: %d, expected %d\n", j, op_argc[ok]);
+			exit(1);				
 		}
 
 		free(line_p);
