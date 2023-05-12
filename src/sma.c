@@ -30,6 +30,26 @@ char
 	return buffer;
 }
 
+char
+char_uppercase(c)
+	char c;
+{
+	if (c <= 'z' && c >= 'a')
+		return c + ('A'- 'a');
+	return c;
+}
+
+char
+*str_uppercase(s)
+	char *s;
+{
+	size_t sl = strlen(s);
+
+	for (size_t i = 0; i < sl; ++i)
+		s[i] = char_uppercase(s[i]);
+
+	return s;
+}
 
 int
 main(argc, argv)
@@ -40,10 +60,10 @@ main(argc, argv)
 		return 1;
 	
 	static
-	sm_unit_t regs[reg_kinds] = {0};
+	sm_unit_t regs[REG_KINDS] = {0};
 	
 	if (!strcmp(argv[1], "run")) {
-		char *fc = read_file(argv[2]);
+		char *fc = str_uppercase(read_file(argv[2]));
 		op_set_t ops = from_asm(fc);
 		free(fc);
 		eval(ops, &regs);
@@ -52,7 +72,7 @@ main(argc, argv)
 		if (argc < 4)
 			return 1;
 
-		char *fc = read_file(argv[2]);
+		char *fc = str_uppercase(read_file(argv[2]));
 		op_set_t ops = from_asm(fc);
 		free(fc);
 		to_bytes(argv[3], ops);

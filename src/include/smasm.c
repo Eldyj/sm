@@ -11,19 +11,19 @@ get_atom_type(str)
 	char *str;
 {
 	if (str[1] != '\0')
-		return atom_number;
+		return ATOM_NUM;
 
 	switch (str[0]) {
-		case 'a':
-		case 'b':
-		case 'c':
-		case 'd':
-		case 'e':
-		case 'f':
-		case 'g':
-			return atom_register;
+		case 'A':
+		case 'B':
+		case 'C':
+		case 'D':
+		case 'E':
+		case 'F':
+		case 'G':
+			return ATOM_REG;
 		default:
-			return atom_number;
+			return ATOM_NUM;
 	}
 }
 
@@ -32,7 +32,7 @@ reg_t
 get_reg(str)
 	char *str;
 {
-	return *str - 'a';
+	return *str - 'A';
 }
 
 sm_unit_t
@@ -46,7 +46,7 @@ atom_t
 get_atom(str)
 	char *str;
 {	
-	if (get_atom_type(str) == atom_register)
+	if (get_atom_type(str) == ATOM_REG)
 		return reg(get_reg(str));
 
 	return num(get_num(str));
@@ -60,35 +60,35 @@ get_op_type(str)
 		const char *name;
 		op_kind_t kind;
 	} op_table[] = {
-		{"mv", op_mv},
-		{"add", op_add},
-		{"sub", op_sub},
-		{"mul", op_mul},
-		{"div", op_div},
-		{"mod", op_mod},
-		{"cmp", op_cmp},
-		{"ja", op_ja},
-		{"jz", op_jz},
-		{"jl", op_jl},
-		{"jg", op_jg},
-		{"jnz", op_jnz},
-		{"jle", op_jle},
-		{"jge", op_jge},
-		{"prn", op_prn},
-		{"jb", op_jb},
-		{"gb", op_gb},
-		{"swp", op_swp},
-		{"shl", op_shl},
-		{"shr", op_shr},
-		{"and", op_and},
-		{"xor", op_xor},
-		{"or", op_or},
-		{"not", op_not},
-		{"inc", op_inc},
-		{"dec", op_dec},
-		{"hlt", op_hlt},
-		{"psh", op_psh},
-		{"pop", op_pop},
+		{"MV", OP_MV},
+		{"ADD", OP_ADD},
+		{"SUB", OP_SUB},
+		{"MUL", OP_MUL},
+		{"DIV", OP_DIV},
+		{"MOD", OP_MOD},
+		{"CMP", OP_CMP},
+		{"JA", OP_JA},
+		{"JZ", OP_JZ},
+		{"JL", OP_JL},
+		{"JG", OP_JG},
+		{"JNZ", OP_JNZ},
+		{"JLE", OP_JLE},
+		{"JGE", OP_JGE},
+		{"PRN", OP_PRN},
+		{"JB", OP_JB},
+		{"GB", OP_GB},
+		{"SWP", OP_SWP},
+		{"SHL", OP_SHL},
+		{"SHR", OP_SHR},
+		{"AND", OP_AND},
+		{"XOR", OP_XOR},
+		{"OR", OP_OR},
+		{"NOT", OP_NOT},
+		{"INC", OP_INC},
+		{"DEC", OP_DEC},
+		{"HLT", OP_HLT},
+		{"PSH", OP_PSH},
+		{"POP", OP_POP},
 	};
 	
 	static const size_t op_count = sizeof(op_table) / sizeof(op_table[0]);
@@ -97,7 +97,7 @@ get_op_type(str)
 		if (!strcmp(str, op_table[i].name))
 			return op_table[i].kind;
 
-	return op_null;
+	return OP_NIL;
 }
 
 
@@ -139,8 +139,8 @@ from_asm(s)
 
 	strl_map_t labels = parse_labels(s);
 	
-	if (strl_map_index(labels, "_start"))
-		ops.index = strl_map_get(labels,"_start");
+	if (strl_map_index(labels, "_START"))
+		ops.index = strl_map_get(labels,"_START");
 
 	char *str = strdup(s);
 	char *str_p = str;

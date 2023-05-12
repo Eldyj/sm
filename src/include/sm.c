@@ -8,9 +8,9 @@
 sm_unit_t
 getval(a, regs)
 	atom_t a;
-	sm_unit_t (*regs)[reg_kinds];
+	sm_unit_t (*regs)[REG_KINDS];
 {
-	if (a.type == atom_register)
+	if (a.type == ATOM_REG)
 		return (*regs)[a.value];
 
 	return a.value;
@@ -24,32 +24,32 @@ getval(a, regs)
 static
 uint8_t
 jmp_states[][3] = {
-	[op_jz - op_jz] = {
+	[OP_JZ - OP_JZ] = {
 		[0] = 1,
 		[1] = 0,
 		[2] = 0,
 	},
-	[op_jl - op_jz] = {
+	[OP_JL - OP_JZ] = {
 		[0] = 0,
 		[1] = 1,
 		[2] = 0,
 	},
-	[op_jg - op_jz] = {
+	[OP_JG - OP_JZ] = {
 		[0] = 0,
 		[1] = 0,
 		[2] = 1,
 	},
-	[op_jle - op_jz] = {
+	[OP_JLE - OP_JZ] = {
 		[0] = 1,
 		[1] = 1,
 		[2] = 0,
 	},
-	[op_jge - op_jz] = {
+	[OP_JGE - OP_JZ] = {
 		[0] = 1,
 		[1] = 0,
 		[2] = 1,
 	},
-	[op_jnz - op_jz] = {
+	[OP_JNZ - OP_JZ] = {
 		[0] = 0,
 		[1] = 1,
 		[2] = 1,
@@ -59,7 +59,7 @@ jmp_states[][3] = {
 void
 eval(ops, regs)
 	op_set_t ops;
-	sm_unit_t (*regs)[reg_kinds];
+	sm_unit_t (*regs)[REG_KINDS];
 {
 	static
 	size_t jb_stack[256] = {0};
@@ -73,13 +73,13 @@ eval(ops, regs)
 		op_t op = ops.operations[ops.index];
 		
 		switch (op.type) {
-			case op_psh: {
+			case OP_PSH: {
 				sm_stack[sm_sindex++] = getval(op.argv[0], regs);
 				break;
 			}
 
-			case op_pop: {
-				if (op.argv[0].type != atom_register)
+			case OP_POP: {
+				if (op.argv[0].type != ATOM_REG)
 					break;
 
 				--sm_sindex;
@@ -87,19 +87,19 @@ eval(ops, regs)
 				break;
 			}
 		
-			case op_mv: {
-				if (op.argv[0].type != atom_register)
+			case OP_MV: {
+				if (op.argv[0].type != ATOM_REG)
 					break;
 				
 				(*regs)[op.argv[0].value] = getval(op.argv[1], regs);
 				break;
 			}
 
-			case op_swp: {
-				if (op.argv[0].type != atom_register)
+			case OP_SWP: {
+				if (op.argv[0].type != ATOM_REG)
 					break;
 					
-				if (op.argv[1].type != atom_register)
+				if (op.argv[1].type != ATOM_REG)
 					break;
 
 				uint8_t v = (*regs)[op.argv[0].value];
@@ -108,111 +108,111 @@ eval(ops, regs)
 				break;
 			}
 
-			case op_add: {
-				if (op.argv[0].type != atom_register)
+			case OP_ADD: {
+				if (op.argv[0].type != ATOM_REG)
 					break;
 					
 				(*regs)[op.argv[0].value] += getval(op.argv[1], regs);
 				break;
 			}
 
-			case op_sub: {
-				if (op.argv[0].type != atom_register)
+			case OP_SUB: {
+				if (op.argv[0].type != ATOM_REG)
 					break;
 					
 				(*regs)[op.argv[0].value] -= getval(op.argv[1], regs);
 				break;
 			}
 
-			case op_mul: {
-				if (op.argv[0].type != atom_register)
+			case OP_MUL: {
+				if (op.argv[0].type != ATOM_REG)
 					break;
 					
 				(*regs)[op.argv[0].value] *= getval(op.argv[1], regs);
 				break;
 			}
 
-			case op_div: {
-				if (op.argv[0].type != atom_register)
+			case OP_DIV: {
+				if (op.argv[0].type != ATOM_REG)
 					break;
 					
 				(*regs)[op.argv[0].value] /= getval(op.argv[1], regs);
 				break;
 			}
 
-			case op_mod: {
-				if (op.argv[0].type != atom_register)
+			case OP_MOD: {
+				if (op.argv[0].type != ATOM_REG)
 					break;
 					
 				(*regs)[op.argv[0].value] %= getval(op.argv[1], regs);
 				break;
 			}
 
-			case op_shl: {
-				if (op.argv[0].type != atom_register)
+			case OP_SHL: {
+				if (op.argv[0].type != ATOM_REG)
 					break;
 					
 				(*regs)[op.argv[0].value] <<= getval(op.argv[1], regs);
 				break;
 			}
 
-			case op_shr: {
-				if (op.argv[0].type != atom_register)
+			case OP_SHR: {
+				if (op.argv[0].type != ATOM_REG)
 					break;
 					
 				(*regs)[op.argv[0].value] >>= getval(op.argv[1], regs);
 				break;
 			}
 
-			case op_and: {
-				if (op.argv[0].type != atom_register)
+			case OP_AND: {
+				if (op.argv[0].type != ATOM_REG)
 					break;
 					
 				(*regs)[op.argv[0].value] &= getval(op.argv[1], regs);
 				break;
 			}
 
-			case op_xor: {
-				if (op.argv[0].type != atom_register)
+			case OP_XOR: {
+				if (op.argv[0].type != ATOM_REG)
 					break;
 					
 				(*regs)[op.argv[0].value] ^= getval(op.argv[1], regs);
 				break;
 			}
 
-			case op_or: {
-				if (op.argv[0].type != atom_register)
+			case OP_OR: {
+				if (op.argv[0].type != ATOM_REG)
 					break;
 					
 				(*regs)[op.argv[0].value] |= getval(op.argv[1], regs);
 				break;
 			}
 				
-			case op_not: {
-				if (op.argv[0].type != atom_register)
+			case OP_NOT: {
+				if (op.argv[0].type != ATOM_REG)
 					break;
 					
 				(*regs)[op.argv[0].value] = ~(*regs)[op.argv[0].value];
 				break;
 			}
 
-			case op_inc: {
-				if (op.argv[0].type != atom_register)
+			case OP_INC: {
+				if (op.argv[0].type != ATOM_REG)
 					break;
 					
 				++(*regs)[op.argv[0].value];
 				break;
 			}
 
-			case op_dec: {
-				if (op.argv[0].type != atom_register)
+			case OP_DEC: {
+				if (op.argv[0].type != ATOM_REG)
 					break;
 					
 				--(*regs)[op.argv[0].value];
 				break;
 			}
 
-			case op_cmp: {
+			case OP_CMP: {
 				uint8_t val = 0;
 				sm_unit_t v1 = getval(op.argv[0], regs);
 				sm_unit_t v2 = getval(op.argv[1], regs);
@@ -223,47 +223,47 @@ eval(ops, regs)
 				if (v1 > v2)
 					val = 2;
 				
-				(*regs)[reg_g] = val;
+				(*regs)[REG_G] = val;
 				break;
 			}
 
-			case op_ja: {
+			case OP_JA: {
 				jmp:
 				ops.index = getval(op.argv[0], regs);
 				continue;
 				break;
 			}
 			
-			case op_jz:
-			case op_jnz:
-			case op_jl:
-			case op_jg:
-			case op_jle:
-			case op_jge: {
-				if (jmp_states[op.type - op_jz][(*regs)[reg_g]])
+			case OP_JZ:
+			case OP_JNZ:
+			case OP_JL:
+			case OP_JG:
+			case OP_JLE:
+			case OP_JGE: {
+				if (jmp_states[op.type - OP_JZ][(*regs)[REG_G]])
 					goto jmp;
 					
 				break;
 			}
 
-			case op_jb: {
+			case OP_JB: {
 				jb_stack[jb_index++] = ops.index+1;
 				goto jmp;
 				break;
 			}
 
-			case op_gb: {
+			case OP_GB: {
 				ops.index = jb_stack[jb_index---1];
 				continue;
 				break;
 			}
 
-			case op_prn: {
+			case OP_PRN: {
 				printf("%u\n", getval(op.argv[0], regs));
 				break;
 			}
 
-			case op_hlt: {
+			case OP_HLT: {
 				exit(getval(op.argv[0], regs));
 				break;
 			}
@@ -301,7 +301,7 @@ reg(r)
 {
 	return (atom_t)
 	{
-		.type = atom_register,
+		.type = ATOM_REG,
 		.value = r,
 	};
 }
@@ -312,7 +312,7 @@ num(n)
 {
 	return (atom_t)
 	{
-		.type = atom_number,
+		.type = ATOM_NUM,
 		.value = n,
 	};
 }

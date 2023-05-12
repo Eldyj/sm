@@ -1,13 +1,13 @@
-factorial:
-mv a 1
-loop:
-mul a b
-cmp b 1
-dec b
-jg loop
-gb
-_start:
-mv b 19
-jb factorial
-prn a
-hlt 0
+FACTORIAL:
+MV A 1
+LOOP:
+MUL A B
+CMP B 1
+DEC B
+JG LOOP
+GB
+_START:
+MV B 19
+JB FACTORIAL
+PRN A
+HLT 0

@@ -11,52 +11,52 @@
 typedef SM_UNIT sm_unit_t;
 
 typedef enum {
-	op_null = 0,
-	op_mv,
-	op_add,
-	op_sub,
-	op_mul,
-	op_div,
-	op_mod,
-	op_cmp,
-	op_ja,
-	op_jz,
-	op_jl,
-	op_jg,
-	op_jnz,
-	op_jge,
-	op_jle,
-	op_prn,
-	op_jb,
-	op_gb,
-	op_swp,
-	op_shr,
-	op_shl,
-	op_and,
-	op_xor,
-	op_or,
-	op_not,
-	op_inc,
-	op_dec,
-	op_hlt,
-	op_psh,
-	op_pop,
+	OP_NIL = 0,
+	OP_MV,
+	OP_ADD,
+	OP_SUB,
+	OP_MUL,
+	OP_DIV,
+	OP_MOD,
+	OP_CMP,
+	OP_JA,
+	OP_JZ,
+	OP_JL,
+	OP_JG,
+	OP_JNZ,
+	OP_JGE,
+	OP_JLE,
+	OP_PRN,
+	OP_JB,
+	OP_GB,
+	OP_SWP,
+	OP_SHR,
+	OP_SHL,
+	OP_AND,
+	OP_XOR,
+	OP_OR,
+	OP_NOT,
+	OP_INC,
+	OP_DEC,
+	OP_HLT,
+	OP_PSH,
+	OP_POP,
 } op_kind_t;
 
 typedef enum {
-	reg_a = 0,
-	reg_b,
-	reg_c,
-	reg_d,
-	reg_e,
-	reg_f,
-	reg_g,
-	reg_kinds,
+	REG_A = 0,
+	REG_B,
+	REG_C,
+	REG_D,
+	REG_E,
+	REG_F,
+	REG_G,
+	REG_KINDS,
 } reg_t;
 
 typedef enum {
-	atom_register,
-	atom_number,
+	ATOM_REG,
+	ATOM_NUM,
 } atom_kind_t;
 
 typedef struct {
@@ -77,8 +77,8 @@ typedef struct {
 } op_set_t;
 
 #	ifndef SM_C
-extern sm_unit_t getval(atom_t a, sm_unit_t (*regs)[reg_kinds]);
-extern void eval(op_set_t ps, sm_unit_t (*regs)[reg_kinds]);
+extern sm_unit_t getval(atom_t a, sm_unit_t (*regs)[REG_KINDS]);
+extern void eval(op_set_t ps, sm_unit_t (*regs)[REG_KINDS]);
 extern void free_op(op_t op);
 extern void free_op_set(op_set_t ops);
 extern atom_t reg(reg_t r);
