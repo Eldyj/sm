@@ -3,7 +3,7 @@ SRC = src
 INCLUDE = $(SRC)/include
 
 CC=gcc
-FLAGS=-O2 -g3 -Wall -Wextra -pedantic -I$(INCLUDE)
+FLAGS=-O2 -g0 -Wall -Wextra -pedantic -I$(INCLUDE)
 CCF=$(CC) $(FLAGS)
 
 sm.o:
