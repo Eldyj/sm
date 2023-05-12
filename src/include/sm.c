@@ -56,6 +56,39 @@ jmp_states[][3] = {
 	},
 };
 
+uint8_t op_argc[OP_KINDS] = {
+	[OP_NIL] = 0,
+	[OP_MV] = 2,
+	[OP_ADD] = 2,
+	[OP_SUB] = 2,
+	[OP_MUL] = 2,
+	[OP_DIV] = 2,
+	[OP_MOD] = 2,
+	[OP_CMP] = 2,
+	[OP_JA] = 1,
+	[OP_JZ] = 1,
+	[OP_JL] = 1,
+	[OP_JG] = 1,
+	[OP_JNZ] = 1,
+	[OP_JGE] = 1,
+	[OP_JLE] = 1,
+	[OP_PRN] = 1,
+	[OP_JB] = 1,
+	[OP_GB] = 0,
+	[OP_SWP] = 2,
+	[OP_SHR] = 2,
+	[OP_SHL] = 2,
+	[OP_AND] = 2,
+	[OP_XOR] = 2,
+	[OP_OR] = 2,
+	[OP_NOT] = 1,
+	[OP_INC] = 1,
+	[OP_DEC] = 1,
+	[OP_HLT] = 1,
+	[OP_PSH] = 1,
+	[OP_POP] = 1,
+};
+
 void
 eval(ops, regs)
 	op_set_t ops;

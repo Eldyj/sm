@@ -97,6 +97,9 @@ get_op_type(str)
 		if (!strcmp(str, op_table[i].name))
 			return op_table[i].kind;
 
+	fprintf(stderr, "unknown instruction: %s\n", str);
+	exit(1);
+
 	return OP_NIL;
 }
 
@@ -149,6 +152,7 @@ from_asm(s)
 	char *line;
 	char *line_p;
 	uint8_t line_start;
+	uint8_t j = 0;
 
 	while ((l = strtok_r(str, "\n", &str)) != NULL) {
 		line_start = 1;
@@ -163,12 +167,14 @@ from_asm(s)
 					++ops.length;
 					ops.operations = realloc(ops.operations, sizeof(op_t) * ops.length);
 					ops.operations[ops.length - 1].type = get_op_type(token);
-					ops.operations[ops.length - 1].argc = 0;
-					ops.operations[ops.length - 1].argv = malloc(sizeof(atom_t) * 1);
+					ops.operations[ops.length - 1].argv = malloc(sizeof(atom_t) * op_argc[ops.operations[ops.length-1].type]);
 					line_start = 0;
+					j = 0;
 				} else {
-					++ops.operations[ops.length - 1].argc;
-					ops.operations[ops.length - 1].argv = realloc(ops.operations[ops.length - 1].argv, sizeof(atom_t) * ops.operations[ops.length - 1].argc);
+					if (j == op_argc[ops.operations[ops.length-1].type]) {
+						fprintf(stderr, "wrong arguments count, given: %d, expected %d\n", j, op_argc[ops.operations[ops.length-1].type]);
+						exit(1);
+					}
 					char *arg = strdup(token);
 
 					if (strl_map_index(labels, arg) > 0) {
@@ -176,7 +182,8 @@ from_asm(s)
 						arg = malloc(sizeof(char) * 20);
 						snprintf(arg, 20, "%lu", strl_map_get(labels, token));
 					}
-					ops.operations[ops.length - 1].argv[ops.operations[ops.length - 1].argc - 1] = get_atom(arg);
+					
+					ops.operations[ops.length - 1].argv[j++] = get_atom(arg);
 					free(arg);
 				}
 			}

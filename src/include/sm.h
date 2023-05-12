@@ -41,6 +41,7 @@ typedef enum {
 	OP_HLT,
 	OP_PSH,
 	OP_POP,
+	OP_KINDS,
 } op_kind_t;
 
 typedef enum {
@@ -66,7 +67,7 @@ typedef struct {
 
 typedef struct {
 	op_kind_t type;
-	uint8_t argc;
+	//uint8_t argc;
 	atom_t *argv;
 } op_t;
 
@@ -77,6 +78,7 @@ typedef struct {
 } op_set_t;
 
 #	ifndef SM_C
+extern uint8_t op_argc[OP_KINDS];
 extern sm_unit_t getval(atom_t a, sm_unit_t (*regs)[REG_KINDS]);
 extern void eval(op_set_t ps, sm_unit_t (*regs)[REG_KINDS]);
 extern void free_op(op_t op);
