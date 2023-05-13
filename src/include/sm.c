@@ -91,6 +91,7 @@ uint8_t op_argc[OP_KINDS] = {
 	[OP_NAND] = 2,
 	[OP_NXOR] = 2,
 	[OP_NOR] = 2,
+	[OP_SN] = 1,
 };
 
 void
@@ -336,6 +337,14 @@ eval(ops, regs)
 
 			case OP_PRN: {
 				printf("%u\n", getval(op.argv[0], regs));
+				break;
+			}
+
+			case OP_SN: {
+				if (op.argv[0].type != ATOM_REG)
+					break;
+					
+				scanf("%u", *regs+op.argv[0].value);
 				break;
 			}
 

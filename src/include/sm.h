@@ -49,6 +49,7 @@ typedef enum {
 	OP_NAND,
 	OP_NXOR,
 	OP_NOR,
+	OP_SN,
 	OP_KINDS,
 } op_kind_t;
 

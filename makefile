@@ -6,7 +6,7 @@ FLAGS=-O2 -Wall -Wextra -pedantic -I$(INCLUDE)
 CCF=$(CC) $(FLAGS)
 
 bin_f:
-	mkdir $(BIN)
+	mkdir $(BIN) -p
 
 sm.o: bin_f
 	$(CCF) -c -o$(BIN)/sm.o $(INCLUDE)/sm.c

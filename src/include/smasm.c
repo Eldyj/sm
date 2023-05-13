@@ -93,9 +93,10 @@ get_op_type(str)
 		{"NAND", OP_NAND},
 		{"NXOR", OP_NXOR},
 		{"NOR", OP_NOR},
+		{"SN", OP_SN},
 	};
 	
-	static const size_t op_count = sizeof(op_table) / sizeof(op_table[0]);
+	static const size_t op_count = sizeof(op_table)/sizeof(op_table[0]);
 
 	for (size_t i = 0; i < op_count; ++i)
 		if (!strcmp(str, op_table[i].name))
