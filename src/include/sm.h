@@ -10,6 +10,10 @@
 
 typedef SM_UNIT sm_unit_t;
 
+#	ifndef SM_STACK_SIZE
+#		define SM_STACK_SIZE 65536
+#	endif /* !SM_STACK_SIZE */
+
 typedef enum {
 	OP_NIL = 0,
 	OP_MV,
@@ -41,6 +45,10 @@ typedef enum {
 	OP_HLT,
 	OP_PSH,
 	OP_POP,
+	OP_BSR,
+	OP_NAND,
+	OP_NXOR,
+	OP_NOR,
 	OP_KINDS,
 } op_kind_t;
 
@@ -67,7 +75,6 @@ typedef struct {
 
 typedef struct {
 	op_kind_t type;
-	//uint8_t argc;
 	atom_t *argv;
 } op_t;
 

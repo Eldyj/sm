@@ -89,6 +89,10 @@ get_op_type(str)
 		{"HLT", OP_HLT},
 		{"PSH", OP_PSH},
 		{"POP", OP_POP},
+		{"BSR", OP_BSR},
+		{"NAND", OP_NAND},
+		{"NXOR", OP_NXOR},
+		{"NOR", OP_NOR},
 	};
 	
 	static const size_t op_count = sizeof(op_table) / sizeof(op_table[0]);

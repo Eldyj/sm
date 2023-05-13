@@ -1,9 +1,8 @@
 BIN = bin
 SRC = src
 INCLUDE = $(SRC)/include
-
 CC=gcc
-FLAGS=-O2 -g0 -Wall -Wextra -pedantic -I$(INCLUDE)
+FLAGS=-O2 -Wall -Wextra -pedantic -I$(INCLUDE)
 CCF=$(CC) $(FLAGS)
 
 sm.o:
@@ -29,3 +28,4 @@ all: sma sme
 install: all
 	cp $(BIN)/sma ~/.local/bin
 	cp $(BIN)/sme ~/.local/bin
+

@@ -87,6 +87,10 @@ uint8_t op_argc[OP_KINDS] = {
 	[OP_HLT] = 1,
 	[OP_PSH] = 1,
 	[OP_POP] = 1,
+	[OP_BSR] = 2,
+	[OP_NAND] = 2,
+	[OP_NXOR] = 2,
+	[OP_NOR] = 2,
 };
 
 void
@@ -99,13 +103,25 @@ eval(ops, regs)
 	uint8_t jb_index = 0;
 	
 	static
-	sm_unit_t sm_stack[8192] = {0};
+	sm_unit_t sm_stack[SM_STACK_SIZE] = {0};
 	size_t sm_sindex = 0;
 	
 	while (ops.index < ops.length) {
 		op_t op = ops.operations[ops.index];
 		
 		switch (op.type) {
+			case OP_BSR: {
+				sm_unit_t *a = *regs + op.argv[0].value;
+				sm_unit_t b = getval(op.argv[1], regs);
+
+				*a = sizeof(sm_unit_t)*8 - 1;
+				
+				while (*a > 0 && (b & (1<<*a)) == 0)
+					--(*a);
+				
+				break;
+			}
+		
 			case OP_PSH: {
 				sm_stack[sm_sindex++] = getval(op.argv[0], regs);
 				break;
@@ -220,7 +236,34 @@ eval(ops, regs)
 				(*regs)[op.argv[0].value] |= getval(op.argv[1], regs);
 				break;
 			}
-				
+
+			case OP_NAND: {
+				if (op.argv[0].type != ATOM_REG)
+					break;
+					
+				sm_unit_t *a = *regs + op.argv[0].value;
+				*a = ~(*a&getval(op.argv[1], regs));
+				break;
+			}
+
+			case OP_NXOR: {
+				if (op.argv[0].type != ATOM_REG)
+					break;
+					
+				sm_unit_t *a = *regs + op.argv[0].value;
+				*a = ~(*a^getval(op.argv[1], regs));
+				break;
+			}
+
+			case OP_NOR: {
+				if (op.argv[0].type != ATOM_REG)
+					break;
+					
+				sm_unit_t *a = *regs + op.argv[0].value;
+				*a = ~(*a|getval(op.argv[1], regs));
+				break;
+			}
+		
 			case OP_NOT: {
 				if (op.argv[0].type != ATOM_REG)
 					break;
